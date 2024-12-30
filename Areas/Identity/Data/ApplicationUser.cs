@@ -6,13 +6,18 @@ using Microsoft.AspNetCore.Identity;
 
 namespace project_task_manager.Areas.Identity.Data;
 
+public enum Roles
+{
+    SuperAdmin,
+    Admin,
+    Moderator,
+    Basic
+}
+
 // Add profile data for application users by adding properties to the ApplicationUser class
 public class ApplicationUser : IdentityUser
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-
-    public int RoleId { get; set; }
-    public ApplicationUserRole Role { get; set; }
 }
 
