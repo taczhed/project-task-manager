@@ -312,7 +312,7 @@ namespace project_task_manager.Migrations
                 table: "Role");
 
             migrationBuilder.RenameTable(
-                name: "AspNetUsers",
+                name: "Users",
                 schema: "Identity",
                 newName: "AspNetUsers");
 
