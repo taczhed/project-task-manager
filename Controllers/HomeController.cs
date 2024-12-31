@@ -27,10 +27,10 @@ namespace project_task_manager.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            var role = await _roleManager.Roles.FirstAsync();
+            var roles = new List<string>(await _userManager.GetRolesAsync(user));
 
             ViewBag.User = user;
-            ViewBag.Role = role;
+            ViewBag.Roles = roles;
 
             return View();
         }
