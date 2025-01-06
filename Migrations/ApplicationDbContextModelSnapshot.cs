@@ -285,6 +285,68 @@ namespace project_task_manager.Migrations
                     b.ToTable("AspNetUsers", "Identity");
                 });
 
+            modelBuilder.Entity("project_task_manager.Models.ApplicationProject", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("ManagerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ManagerId");
+
+                    b.ToTable("Projects", "Identity");
+                });
+
+            modelBuilder.Entity("project_task_manager.Models.ApplicationTask", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("ExecutorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ExecutorId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Tasks", "Identity");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -334,6 +396,48 @@ namespace project_task_manager.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("project_task_manager.Models.ApplicationProject", b =>
+                {
+                    b.HasOne("project_task_manager.Areas.Identity.Data.ApplicationUser", "Manager")
+                        .WithMany("ManagedProjects")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("project_task_manager.Models.ApplicationTask", b =>
+                {
+                    b.HasOne("project_task_manager.Areas.Identity.Data.ApplicationUser", "Executor")
+                        .WithMany("ExecutedTasks")
+                        .HasForeignKey("ExecutorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("project_task_manager.Models.ApplicationProject", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Executor");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("project_task_manager.Areas.Identity.Data.ApplicationUser", b =>
+                {
+                    b.Navigation("ExecutedTasks");
+
+                    b.Navigation("ManagedProjects");
+                });
+
+            modelBuilder.Entity("project_task_manager.Models.ApplicationProject", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

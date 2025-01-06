@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using project_task_manager.Areas.Identity.Data;
+using project_task_manager.Enums;
 
 namespace project_task_manager.Areas.Identity.Pages.Account
 {
@@ -137,7 +138,14 @@ namespace project_task_manager.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, Enums.Roles.Basic.ToString());
+                    if ((await _userManager.GetUserNameAsync(user)).Contains("admin"))
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+                    } 
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

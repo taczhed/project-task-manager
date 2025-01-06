@@ -1,4 +1,4 @@
-﻿namespace project_task_manager.Areas.Identity.Enums
+﻿namespace project_task_manager.Enums
 {
     public enum Roles
     {

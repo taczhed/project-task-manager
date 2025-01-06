@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using project_task_manager.Areas.Identity.Data;
+using project_task_manager.Models;
+using System.Reflection.Emit;
 
 namespace project_task_manager.Areas.Identity.Data;
 
@@ -13,9 +14,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     { 
     }
 
+    public DbSet<ApplicationTask> Tasks { get; set; }
+    public DbSet<ApplicationProject> Projects { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        // Identity Schema Configuration
         builder.HasDefaultSchema("Identity");
         builder.Entity<IdentityUser>(entity =>
         {
@@ -45,6 +51,31 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         {
             entity.ToTable("UserTokens");
         });
+
+        // Project -> Manager (User)
+        builder.Entity<ApplicationProject>()
+            .HasOne(p => p.Manager)
+            .WithMany(u => u.ManagedProjects)
+            .HasForeignKey(p => p.ManagerId)
+            .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
+
+        // Task -> Executor (User)
+        builder.Entity<ApplicationTask>()
+            .HasOne(t => t.Executor)
+            .WithMany(u => u.ExecutedTasks)
+            .HasForeignKey(t => t.ExecutorId)
+            .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
+
+        // Task -> Project
+        builder.Entity<ApplicationTask>()
+            .HasOne(t => t.Project)
+            .WithMany(p => p.Tasks)
+            .HasForeignKey(t => t.ProjectId);
+
+        // Configure TaskPriority as an enum
+        builder.Entity<ApplicationTask>()
+            .Property(t => t.Priority)
+            .HasConversion<int>(); // Store the enum as an integer in the database
     }
 
     private class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
