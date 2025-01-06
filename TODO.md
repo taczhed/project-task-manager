@@ -1,3 +1,3 @@
-﻿- Wyświetlanie, dodawanie i usuwanie projektów (tytuł, opis, src do img)
-- Wyświetlanie, dodawanie i usuwanie zadań w projektach (tytuł, opis, status zadania, przypisana osoba lub jej brak)
-- Przypisywanie użytkowników do zadań
+﻿- Dostęp poszczególnych ról użytkowników do podstron (przykład w Controllers/UserRolesController -> [Authorize(Roles = "Admin")])
+- Dopieszczenie Views
+- Zmodyfikować lekko style css dla klas bootstrap-a
