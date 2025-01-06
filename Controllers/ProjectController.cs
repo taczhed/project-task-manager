@@ -48,7 +48,7 @@ namespace project_task_manager.Controllers
         // GET: Project/Create
         public IActionResult Create()
         {
-            ViewData["ManagerId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ManagerId"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
 
@@ -78,7 +78,7 @@ namespace project_task_manager.Controllers
             {
                 return NotFound();
             }
-            ViewData["ManagerId"] = new SelectList(_context.Users, "Id", "Id", applicationProject.ManagerId);
+            ViewData["ManagerId"] = new SelectList(_context.Users, "Id", "Email", applicationProject.ManagerId);
             return View(applicationProject);
         }
 

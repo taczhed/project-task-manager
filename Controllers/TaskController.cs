@@ -98,8 +98,8 @@ namespace project_task_manager.Controllers
             {
                 return NotFound();
             }
-            ViewData["ExecutorId"] = new SelectList(_context.Users, "Id", "Id", applicationTask.ExecutorId);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ID", "ID", applicationTask.ProjectId);
+            ViewData["ExecutorId"] = new SelectList(_context.Users, "Id", "Email", applicationTask.ExecutorId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ID", "Title", applicationTask.ProjectId);
             ViewData["Priority"] = new SelectList(Enum.GetValues(typeof(Priority)));
             ViewData["Status"] = new SelectList(Enum.GetValues(typeof(Status)));
             return View(applicationTask);
