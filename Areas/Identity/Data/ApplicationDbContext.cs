@@ -76,6 +76,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ApplicationTask>()
             .Property(t => t.Priority)
             .HasConversion<int>(); // Store the enum as an integer in the database
+
+        // Configure TaskStatus as an enum
+        builder.Entity<ApplicationTask>()
+            .Property(t => t.Status)
+            .HasConversion<int>(); // Store the enum as an integer in the database
     }
 
     private class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>

@@ -25,9 +25,24 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Roles</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Manage Roles</a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Project" asp-action="Index">Manage Projects</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Task" asp-action="Index">Manage Tasks</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Task" asp-action="ForMe">Tasks</a>
+                        </li>
                     </ul>
                 </div>
                 <partial name="_LoginPartial" />

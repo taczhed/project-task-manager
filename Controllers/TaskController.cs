@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,16 +15,30 @@ namespace project_task_manager.Controllers
     public class TaskController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TaskController(ApplicationDbContext context)
+        public TaskController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Task
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Tasks.Include(a => a.Executor).Include(a => a.Project);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: Task/ForMe
+        public async Task<IActionResult> ForMe()
+        {
+            var userId = _userManager.GetUserId(User);
+            var applicationDbContext = _context.Tasks
+                .Include(a => a.Executor)
+                .Include(a => a.Project)
+                .Where(t => t.ExecutorId == userId);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -53,6 +68,7 @@ namespace project_task_manager.Controllers
             ViewData["ExecutorId"] = new SelectList(_context.Users, "Id", "Id");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ID", "ID");
             ViewData["Priority"] = new SelectList(Enum.GetValues(typeof(Priority)));
+            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(Status)));
 
             return View();
         }
@@ -62,7 +78,7 @@ namespace project_task_manager.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Title,Description,Priority,ExecutorId,ProjectId")] ApplicationTask applicationTask)
+        public async Task<IActionResult> Create([Bind("ID,Title,Description,Priority,Status,ExecutorId,ProjectId")] ApplicationTask applicationTask)
         {
             _context.Add(applicationTask);
             await _context.SaveChangesAsync();
@@ -84,6 +100,8 @@ namespace project_task_manager.Controllers
             }
             ViewData["ExecutorId"] = new SelectList(_context.Users, "Id", "Id", applicationTask.ExecutorId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ID", "ID", applicationTask.ProjectId);
+            ViewData["Priority"] = new SelectList(Enum.GetValues(typeof(Priority)));
+            ViewData["Status"] = new SelectList(Enum.GetValues(typeof(Status)));
             return View(applicationTask);
         }
 
@@ -99,9 +117,7 @@ namespace project_task_manager.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
+             try
                 {
                     _context.Update(applicationTask);
                     await _context.SaveChangesAsync();
@@ -118,10 +134,6 @@ namespace project_task_manager.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["ExecutorId"] = new SelectList(_context.Users, "Id", "Id", applicationTask.ExecutorId);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ID", "ID", applicationTask.ProjectId);
-            return View(applicationTask);
         }
 
         // GET: Task/Delete/5

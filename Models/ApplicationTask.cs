@@ -17,6 +17,7 @@ namespace project_task_manager.Models
         public string Description { get; set; }
 
         public Priority Priority { get; set; }
+        public Status Status { get; set; }
 
         // Foreign Keys
         public string ExecutorId { get; set; } // The user executing this task

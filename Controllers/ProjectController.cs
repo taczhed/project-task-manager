@@ -94,8 +94,6 @@ namespace project_task_manager.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     _context.Update(applicationProject);
@@ -113,9 +111,6 @@ namespace project_task_manager.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["ManagerId"] = new SelectList(_context.Users, "Id", "Id", applicationProject.ManagerId);
-            return View(applicationProject);
         }
 
         // GET: Project/Delete/5
