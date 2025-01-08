@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using project_task_manager.Areas.Identity.Data;
 using project_task_manager.Enums;
 using project_task_manager.Models;
 
 namespace project_task_manager.Controllers
 {
+    [Authorize]
     public class TaskController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,6 +26,7 @@ namespace project_task_manager.Controllers
         }
 
         // GET: Task
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Tasks.Include(a => a.Executor).Include(a => a.Project);
@@ -54,19 +57,27 @@ namespace project_task_manager.Controllers
                 .Include(a => a.Executor)
                 .Include(a => a.Project)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
             if (applicationTask == null)
             {
                 return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (!User.IsInRole("Admin") && applicationTask.ExecutorId != userId)
+            {
+                return Forbid();
             }
 
             return View(applicationTask);
         }
 
         // GET: Task/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["ExecutorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ID", "ID");
+            ViewData["ExecutorId"] = new SelectList(_context.Users, "Id", "Email");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ID", "Title");
             ViewData["Priority"] = new SelectList(Enum.GetValues(typeof(Priority)));
             ViewData["Status"] = new SelectList(Enum.GetValues(typeof(Status)));
 
@@ -74,10 +85,9 @@ namespace project_task_manager.Controllers
         }
 
         // POST: Task/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ID,Title,Description,Priority,Status,ExecutorId,ProjectId")] ApplicationTask applicationTask)
         {
             _context.Add(applicationTask);
@@ -98,6 +108,13 @@ namespace project_task_manager.Controllers
             {
                 return NotFound();
             }
+
+            var userId = _userManager.GetUserId(User);
+            if (!User.IsInRole("Admin") && applicationTask.ExecutorId != userId)
+            {
+                return Forbid();
+            }
+
             ViewData["ExecutorId"] = new SelectList(_context.Users, "Id", "Email", applicationTask.ExecutorId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ID", "Title", applicationTask.ProjectId);
             ViewData["Priority"] = new SelectList(Enum.GetValues(typeof(Priority)));
@@ -106,8 +123,6 @@ namespace project_task_manager.Controllers
         }
 
         // POST: Task/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Description,Priority,ExecutorId,ProjectId")] ApplicationTask applicationTask)
@@ -117,23 +132,29 @@ namespace project_task_manager.Controllers
                 return NotFound();
             }
 
-             try
+            var userId = _userManager.GetUserId(User);
+            if (!User.IsInRole("Admin") && applicationTask.ExecutorId != userId)
+            {
+                return Forbid();
+            }
+
+            try
+            {
+                _context.Update(applicationTask);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ApplicationTaskExists(applicationTask.ID))
                 {
-                    _context.Update(applicationTask);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!ApplicationTaskExists(applicationTask.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Task/Delete/5
@@ -148,9 +169,16 @@ namespace project_task_manager.Controllers
                 .Include(a => a.Executor)
                 .Include(a => a.Project)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
             if (applicationTask == null)
             {
                 return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (!User.IsInRole("Admin") && applicationTask.ExecutorId != userId)
+            {
+                return Forbid();
             }
 
             return View(applicationTask);
@@ -162,11 +190,19 @@ namespace project_task_manager.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var applicationTask = await _context.Tasks.FindAsync(id);
-            if (applicationTask != null)
+
+            if (applicationTask == null)
             {
-                _context.Tasks.Remove(applicationTask);
+                return NotFound();
             }
 
+            var userId = _userManager.GetUserId(User);
+            if (!User.IsInRole("Admin") && applicationTask.ExecutorId != userId)
+            {
+                return Forbid();
+            }
+
+            _context.Tasks.Remove(applicationTask);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

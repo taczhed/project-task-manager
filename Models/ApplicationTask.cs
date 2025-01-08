@@ -20,11 +20,11 @@ namespace project_task_manager.Models
         public Status Status { get; set; }
 
         // Foreign Keys
-        public string ExecutorId { get; set; } // The user executing this task
+        public string ExecutorId { get; set; } // User assigned to this task
         public int ProjectId { get; set; }  // The project to which this task belongs
 
         // Navigation Properties
-        public ApplicationUser Executor { get; set; }  // Executor of the task
+        public ApplicationUser Executor { get; set; }  // User executing the task
         public ApplicationProject Project { get; set; } // Project this task belongs to
     }
 }
