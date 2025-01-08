@@ -1,22 +1,101 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+/* New styles for task view */
+.calendar-background {
+    background-image: url('/images/calendar-background.jpg'); /* Replace with a valid path to your image */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.no-tasks-message {
+    font-size: 24px;
+    color: gray;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.tasks-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.task-card {
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    color: white;
+}
+
+.priority-low {
+    background-color: #28a745; /* Green */
+}
+
+.priority-medium {
+    background-color: #ffc107; /* Yellow */
+}
+
+.priority-high {
+    background-color: #fd7e14; /* Orange */
+}
+
+.priority-critical {
+    background-color: #dc3545; /* Red */
+}
+
+.task-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn {
+    padding: 8px 12px;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+}
+
+.btn-danger {
+    background-color: #dc3545;
 }
