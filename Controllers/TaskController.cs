@@ -25,7 +25,7 @@ namespace project_task_manager.Controllers
             _userManager = userManager;
         }
 
-        // GET: Task
+        
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
@@ -33,7 +33,7 @@ namespace project_task_manager.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Task/ForMe
+        
         public async Task<IActionResult> ForMe()
         {
             var userId = _userManager.GetUserId(User);
@@ -45,7 +45,7 @@ namespace project_task_manager.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Task/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -72,7 +72,7 @@ namespace project_task_manager.Controllers
             return View(applicationTask);
         }
 
-        // GET: Task/Create
+        
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
@@ -84,7 +84,7 @@ namespace project_task_manager.Controllers
             return View();
         }
 
-        // POST: Task/Create
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -95,7 +95,7 @@ namespace project_task_manager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Task/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -122,7 +122,7 @@ namespace project_task_manager.Controllers
             return View(applicationTask);
         }
 
-        // POST: Task/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Description,Priority,ExecutorId,ProjectId")] ApplicationTask applicationTask)
@@ -157,7 +157,7 @@ namespace project_task_manager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Task/Delete/5
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -184,7 +184,7 @@ namespace project_task_manager.Controllers
             return View(applicationTask);
         }
 
-        // POST: Task/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -205,6 +205,30 @@ namespace project_task_manager.Controllers
             _context.Tasks.Remove(applicationTask);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddSolution(int id, string solution)
+        {
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.ID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (!User.IsInRole("Admin") && task.ExecutorId != userId)
+            {
+                return Forbid();
+            }
+
+            task.Solution = solution;
+            task.Status = Status.Done; 
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index)); 
         }
 
         private bool ApplicationTaskExists(int id)

@@ -6,3 +6,12 @@
     <h1 class="display-4">Welcome @ViewBag.User.FirstName</h1>
     <p>Roles: <i>@string.Join(", ", @ViewBag.Roles)</i></p>
 </div>
+
+<div class="task-stats mt-5">
+    <h2>Task Statistics</h2>
+    <div>
+        <p>Completed Tasks: @ViewBag.TaskStats.CompletedPercentage%</p>
+        <p>In Progress Tasks: @ViewBag.TaskStats.InProgressPercentage%</p>
+        <p>Overdue Tasks: @ViewBag.TaskStats.OverduePercentage%</p>
+    </div>
+</div>

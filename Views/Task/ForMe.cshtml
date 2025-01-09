@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<project_task_manager.Models.ApplicationTask>
 
+@using project_task_manager.Enums 
+
 @{
     ViewData["Title"] = "My Tasks";
 }
@@ -27,6 +29,12 @@
                         <a class="btn btn-warning" asp-action="Edit" asp-route-id="@task.ID">Edit</a>
                         <a class="btn btn-info" asp-action="Details" asp-route-id="@task.ID">Details</a>
                         <a class="btn btn-danger" asp-action="Delete" asp-route-id="@task.ID">Delete</a>
+
+                        
+                        @if (task.Status != Status.Done)
+                        {
+                            <a class="btn btn-success" asp-action="Details" asp-route-id="@task.ID">Add Solution</a>
+                        }
                     </div>
                 </div>
             }
