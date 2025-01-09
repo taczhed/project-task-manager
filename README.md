@@ -31,9 +31,9 @@ Wykonaj poniższe kroki, aby uruchomić projekt lokalnie.
    }
    ...
 
-4. **Zastosuj migracje. Projekt korzysta z Entity Framework Core do zarządzania bazą danych. Zastosuj migracje, aby utworzyć schemat bazy danych (jeśli komenda zgłasza błąd, użyj polecenia ```update-database``` z poziomu Package Manager Console):**
+4. **Zastosuj migracje. Projekt korzysta z Entity Framework Core do zarządzania bazą danych. Zastosuj migracje, aby utworzyć schemat bazy danych, z poziomu Package Manager Console, użyj polecenia::**
    ```bash
-   dotnet ef database update
+   update-database
 
 5. **Uruchom projekt Uruchom serwer deweloperski, aplikacja będzie dostępna pod adresem https://localhost:5001 (lub na porcie zdefiniowanym w pliku launchSettings.json):**
    ```bash
