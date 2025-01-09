@@ -1,27 +1,30 @@
 .priority-low {
-    background-color: #28a745; /* Green */
+    border-left: 6px solid;
+    border-color: #28a745; /* Green */
 }
 
 .priority-medium {
-    background-color: #ffc107; /* Yellow */
+    border-left: 6px solid;
+    border-color: #ffc107; /* Yellow */
 }
 
 .priority-high {
-    background-color: #fd7e14; /* Orange */
+    border-left: 6px solid;
+    border-color: #fd7e14; /* Orange */
 }
 
 .priority-critical {
-    background-color: #dc3545; /* Red */
+    border-left: 6px solid;
+    border-color: #dc3545; /* Red */
 }
 
 .task-card {
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-    color: white;
-    margin-bottom: 20px;
+    border-radius: 0px 10px 10px 0px;
+    padding: 24px 30px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    width: 510px;
+    text-align: left;
+    color: #111111;
 }
 
 textarea.form-control {
@@ -92,3 +95,25 @@ button.btn-success {
     button.btn-success:hover {
         background-color: #218838;
     }
+
+
+.navbar-brand {
+    color: white !important;
+    font-weight: 700;
+}
+
+.nav-link {
+    color: #ffffff !important;
+    font-size: !important;
+    transition: 0.2s ease-in-out;
+}
+
+    .nav-link:hover {
+        color: #dddddd !important;
+    }
+
+.tasks-container {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}

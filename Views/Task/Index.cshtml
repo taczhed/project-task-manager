@@ -28,8 +28,8 @@
                     <p>@task.Description</p>
                     <p><strong>Priority:</strong> @task.Priority</p>
                     <p><strong>Status:</strong> @task.Status</p>
-                    <p><strong>Assigned:</strong> @task.Executor?.Email ?? "Unassigned"</p>
-                    <p><strong>Project:</strong> @task.Project?.Title ?? "No Project"</p>
+                    <p><strong>Assigned:</strong> @(task.Executor?.Email ?? "Unassigned")</p>
+                    <p><strong>Project:</strong> @(task.Project?.Title ?? "No Project")</p>
                     <div class="task-actions">
                         <a class="btn btn-warning" asp-action="Edit" asp-route-id="@task.ID">Edit</a>
                         <a class="btn btn-info" asp-action="Details" asp-route-id="@task.ID">Details</a>
