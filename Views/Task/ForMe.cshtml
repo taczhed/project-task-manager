@@ -30,10 +30,13 @@
                         <a class="btn btn-info" asp-action="Details" asp-route-id="@task.ID">Details</a>
                         <a class="btn btn-danger" asp-action="Delete" asp-route-id="@task.ID">Delete</a>
 
-                        
-                        @if (task.Status != Status.Done)
+                        @if (task.Status == Status.Done && !string.IsNullOrEmpty(task.Solution))
                         {
-                            <a class="btn btn-success" asp-action="Details" asp-route-id="@task.ID">Add Solution</a>
+                            <a class="btn btn-success" asp-action="EditSolution" asp-route-id="@task.ID">Edit Solution</a>
+                        }
+                        else if (task.Status != Status.Done)
+                        {
+                            <a class="btn btn-primary" asp-action="Details" asp-route-id="@task.ID">Add Solution</a>
                         }
                     </div>
                 </div>

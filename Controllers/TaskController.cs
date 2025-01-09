@@ -228,7 +228,50 @@ namespace project_task_manager.Controllers
             task.Status = Status.Done; 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index)); 
+            return RedirectToAction(nameof(ForMe));
+        }
+
+        
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EditSolution(int id)
+        {
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.ID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (!User.IsInRole("Admin") && task.ExecutorId != userId)
+            {
+                return Forbid();
+            }
+
+            return View(task); 
+        }
+
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EditSolution(int id, string solution)
+        {
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.ID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (!User.IsInRole("Admin") && task.ExecutorId != userId)
+            {
+                return Forbid();
+            }
+
+            task.Solution = solution; 
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ForMe)); 
         }
 
         private bool ApplicationTaskExists(int id)

@@ -1,0 +1,19 @@
+﻿@model project_task_manager.Models.ApplicationTask
+
+@{
+    ViewData["Title"] = "Edit Solution";
+}
+
+<h1>Edit Solution</h1>
+
+<div>
+    <form asp-action="EditSolution" method="post">
+        <input type="hidden" name="id" value="@Model.ID" />
+        <div class="form-group">
+            <label for="solution">Solution</label>
+            <textarea class="form-control" id="solution" name="solution" rows="5" required>@Model.Solution</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a class="btn btn-secondary" asp-action="ForMe">Cancel</a>
+    </form>
+</div>
