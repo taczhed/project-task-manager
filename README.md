@@ -38,3 +38,14 @@ Wykonaj poniższe kroki, aby uruchomić projekt lokalnie.
 5. **Uruchom projekt Uruchom serwer deweloperski, aplikacja będzie dostępna pod adresem https://localhost:5001 (lub na porcie zdefiniowanym w pliku launchSettings.json):**
    ```bash
    dotnet run
+
+---
+
+## Tworzenie użytkownika administracyjnego
+Aby skorzystać z aplikacji, konieczne jest dodanie użytkownika o Firstname "admin". Reszta danych (np. nazwisko, adres e-mail, hasło) może być losowa.
+
+Przykładowe dane użytkownika:
+- Firstname: **admin**
+- Lastname: **Doe**
+- Email: **admin@example.com**
+- Password: **StrongPassword123**
