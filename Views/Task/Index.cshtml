@@ -7,10 +7,12 @@
 }
 
 <div class="calendar-background">
-    <h1>Tasks</h1>
-    <p>
-        <a class="btn btn-primary" asp-action="Create">Create New</a>
-    </p>
+    <div class="d-flex justify-content-between">
+        <h1>Tasks</h1>
+        <p>
+            <a class="btn btn-primary" asp-action="Create">Create New</a>
+        </p>
+    </div>
 
     @if (!Model.Any())
     {
