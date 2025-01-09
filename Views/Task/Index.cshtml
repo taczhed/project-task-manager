@@ -1,18 +1,16 @@
 ﻿@model IEnumerable<project_task_manager.Models.ApplicationTask>
 
-@using project_task_manager.Enums 
+@using project_task_manager.Enums
 
 @{
     ViewData["Title"] = "Tasks";
 }
 
 <div class="calendar-background">
-    <div class="d-flex justify-content-between">
-        <h1>Tasks</h1>
-        <p>
-            <a class="btn btn-primary" asp-action="Create">Create New</a>
-        </p>
-    </div>
+    <h1>Tasks</h1>
+    <p>
+        <a class="btn btn-primary" asp-action="Create">Create New</a>
+    </p>
 
     @if (!Model.Any())
     {
@@ -28,8 +26,8 @@
                     <p>@task.Description</p>
                     <p><strong>Priority:</strong> @task.Priority</p>
                     <p><strong>Status:</strong> @task.Status</p>
-                    <p><strong>Assigned:</strong> @(task.Executor?.Email ?? "Unassigned")</p>
-                    <p><strong>Project:</strong> @(task.Project?.Title ?? "No Project")</p>
+                    <p><strong>Assigned:</strong> @task.Executor?.Email</p> 
+                    <p><strong>Project:</strong> @task.Project?.Title</p> 
                     <div class="task-actions">
                         <a class="btn btn-warning" asp-action="Edit" asp-route-id="@task.ID">Edit</a>
                         <a class="btn btn-info" asp-action="Details" asp-route-id="@task.ID">Details</a>
