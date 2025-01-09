@@ -324,6 +324,9 @@ namespace project_task_manager.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1024)");
 
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ExecutorId")
                         .HasColumnType("nvarchar(450)");
 
