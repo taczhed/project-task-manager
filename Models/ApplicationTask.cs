@@ -21,6 +21,9 @@ namespace project_task_manager.Models
         public Priority Priority { get; set; }
         public Status Status { get; set; }
 
+        [DataType(DataType.DateTime)]
+        public DateTime? EndDate { get; set; }
+
         public string? ExecutorId { get; set; }
         public int ProjectId { get; set; }
 
